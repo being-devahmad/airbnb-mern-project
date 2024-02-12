@@ -1,0 +1,74 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+  <div class="col-8 offset-2 mt-3">
+    <h1>Create a new listing</h1>
+    <form action="/listings" method="POST" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="title" class="form-label">Enter Title</label>
+        <input
+          type="text"
+          name="title"
+          placeholder="Enter Titlte"
+          class="form-control"
+          required
+        />
+        <div class="valid-feedback">Title looks good</div>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Enter Description</label>
+        <textarea
+          type="text"
+          name="description"
+          required
+          class="form-control"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Choose image</label>
+        <input
+          type="text"
+          name="image"
+          placeholder="Enter Image URL/Link"
+          class="form-control"
+        />
+      </div>
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Enter Price</label>
+          <input
+            type="text"
+            name="price"
+            placeholder="1200"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Enter valid price</div>
+        </div>
+        <div class="mb-3 col-md-8">
+          <label for="location" class="form-label">Enter Location</label>
+          <input
+            type="text"
+            name="location"
+            placeholder="Multan , Punjab"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Enter location name</div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="country" class="form-label">Enter Country</label>
+        <input
+          type="text"
+          name="country"
+          placeholder="Pakistan"
+          required
+          class="form-control"
+        />
+        <div class="invalid-feedback">Enter country name</div>
+      </div>
+      <button class="btn btn-dark mb-3 add-btn">Add</button>
+    </form>
+  </div>
+</div>
