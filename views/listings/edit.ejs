@@ -2,7 +2,12 @@
 <div class="row">
   <div class="col-8 offset-2 mt-3">
     <h1>Edit listing</h1>
-    <form action="/listings/<%=listing._id%>?_method=PUT" method="post">
+    <form
+      action="/listings/<%=listing._id%>?_method=PUT"
+      method="post"
+      class="needs-validation"
+      novalidate
+    >
       <div class="mb-3">
         <label for="title" class="form-label">Enter Title</label>
         <input
@@ -10,13 +15,16 @@
           name="title"
           value="<%= listing.title %>"
           class="form-control"
+          required
         />
+        <div class="valid-feedback">Title looks good</div>
       </div>
       <div class="mb-3">
         <label for="description" class="form-label">Enter Description</label>
-        <textarea type="text" name="description" class="form-control">
+        <textarea type="text" name="description" required class="form-control">
 <%= listing.description %></textarea
         >
+        <div class="invalid-feedback">Enter enter short description</div>
       </div>
       <div class="mb-3">
         <label for="image" class="form-label">Choose image</label>
@@ -25,6 +33,7 @@
           name="image"
           value="<%= listing.image %>"
           class="form-control"
+          required
         />
       </div>
       <div class="row">
@@ -35,7 +44,9 @@
             name="price"
             value="<%= listing.price %>"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Enter valid price</div>
         </div>
         <div class="mb-3 col-md-8">
           <label for="location" class="form-label">Enter Location</label>
@@ -44,7 +55,9 @@
             name="location"
             value="<%= listing.location %>"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Enter location name</div>
         </div>
       </div>
       <div class="mb-3">
@@ -54,7 +67,9 @@
           name="country"
           value="<%= listing.country %>"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">Enter country name</div>
       </div>
       <button class="btn btn-dark mb-3 update-btn">Update</button>
     </form>
