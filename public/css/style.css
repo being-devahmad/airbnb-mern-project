@@ -50,7 +50,7 @@ nav {
 }
 
 /* Cards */
-.card {
+.listing-card {
   border: none !important;
   margin-bottom: 2rem;
 }
@@ -95,4 +95,5 @@ nav {
 .show-card {
   padding-left: 0;
   padding-right: 0;
+  border: none !important;
 }
