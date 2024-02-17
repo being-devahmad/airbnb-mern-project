@@ -10,14 +10,17 @@
       alt="..."
     />
     <div class="card-body">
+      <p class="card-text">Owned by : <b><%= listing.owner.username %></b></p>
+      <p class="card-text"><%= listing.description %></p>
       <p class="card-text">
-        <%= listing.description %> <br />
-        &#8377;<%= listing.price.toLocaleString("en-PK") %> <br />
-        <%= listing.location %> <%= listing.country %> <br />
+        &#8377;<%= listing.price.toLocaleString("en-PK") %>
       </p>
+      <p class="card-text"><%= listing.location %> <%= listing.country %></p>
     </div>
   </div>
   <br />
+
+  <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
   <div class="btns">
     <a
       href="/listings/<%=listing._id%>/edit"
@@ -28,9 +31,11 @@
       <button class="btn btn-dark offset-5">Delete</button>
     </form>
   </div>
-
+  <% }%>
+  <br />
   <div class="col-8 offset-3">
     <hr />
+    <% if(currUser){ %>
     <h4>Leave a Review</h4>
     <form
       action="/listings/<%=listing._id%>/reviews"
@@ -64,27 +69,25 @@
       </div>
       <button class="btn btn-success my-3">Submit</button>
     </form>
-
     <hr />
-
+    <% } %>
     <!-- Reviews -->
     <h4>All Reviews</h4>
+
     <div class="row">
       <% for(review of listing.reviews) { %>
       <div class="card mb-3 col-5 ms-3 p-3">
         <div class="card-body">
-          <h5 class="card-title">Jan Doe</h5>
+          <h5 class="card-title">@<%= review.author.username %></h5>
           <p class="card-text"><%= review.comment %></p>
           <p class="card-text">
-            <% for(let i = 1; i <= 5; i++) { %> 
-              <% if (i <= review.rating) { %>
-                  <i class="fa-solid fa-star" style="color: rgb(204, 146, 11)"></i>
-            <% } 
-                else { %>
-                  <i class="far fa-star"></i>
-            <% } %> 
-          <% } %>
+            <% for(let i = 1; i <= 5; i++) { %> <% if (i <= review.rating) { %>
+            <i class="fa-solid fa-star" style="color: rgb(204, 146, 11)"></i>
+            <% } else { %>
+            <i class="far fa-star"></i>
+            <% } %> <% } %>
           </p>
+          %>
           <form
             action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
             method="post"
