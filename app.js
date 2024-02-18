@@ -16,15 +16,16 @@ const User = require("./models/user.js")
 
 const app = express();
 const port = 3000;
-// const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust';
-const dbUrl = process.env.ATLASDB
+const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust';
+// const dbUrl = process.env.ATLASDB
+
 
 const listingRouter = require("./routes/listing.js")
 const reviewRouter = require("./routes/review.js")
 const userRouter = require("./routes/user.js")
 
 const store = MongoStore.create({
-    mongoUrl: dbUrl,
+    mongoUrl: MONGO_URL,
     crypto: {
         secret: process.env.SECRET
     },
@@ -59,7 +60,7 @@ passport.deserializeUser(User.deserializeUser());
 // Connect to MongoDB
 async function main() {
     try {
-        await mongoose.connect(dbUrl);
+        await mongoose.connect(MONGO_URL);
         console.log('Connected to database successfully');
     } catch (error) {
         console.error('Error connecting to database:', error);
