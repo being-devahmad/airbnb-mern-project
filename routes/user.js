@@ -10,12 +10,13 @@ router.route("/signup")
     .post(wrapAsync(UserController.signUpUser))
 
 router.route("/login")
-    .get(async (req, res) => { UserController.showLoginForm })
+    .get(async (req, res) => { await UserController.showLoginForm(req, res); })
     .post(saveRedirectUrl,
         passport.authenticate('local', {
             failureRedirect: '/login',
             failureFlash: true
         }), UserController.login)
+
 
 
 router.get("/logout", UserController.logoutUser)

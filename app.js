@@ -1,9 +1,14 @@
+if (process.env.NODE_ENV !== 'production') {
+    require("dotenv").config()
+}
+
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const methodOverride = require("method-override")
 const ejsMate = require('ejs-mate');
 const session = require("express-session")
+const MongoStore = require("connect-mongo")
 const flash = require("connect-flash")
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -11,14 +16,26 @@ const User = require("./models/user.js")
 
 const app = express();
 const port = 3000;
-const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust';
+// const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust';
+const dbUrl = process.env.ATLASDB
 
 const listingRouter = require("./routes/listing.js")
 const reviewRouter = require("./routes/review.js")
 const userRouter = require("./routes/user.js")
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: "mysupersecretstring",
+    },
+    touchAfter: 24 * 3600
+})
+store.on("error", () => {
+    console.log("Error in MONGODB Session store", err);
+})
 
 const sessinOptions = {
+    store: store,
     secret: "mysupersecretstring",
     resave: false,
     saveUninitialized: true,
@@ -28,6 +45,7 @@ const sessinOptions = {
         httpOnly: true
     }
 }
+
 app.use(session(sessinOptions))
 app.use(flash())
 
@@ -41,7 +59,7 @@ passport.deserializeUser(User.deserializeUser());
 // Connect to MongoDB
 async function main() {
     try {
-        await mongoose.connect(MONGO_URL);
+        await mongoose.connect(dbUrl);
         console.log('Connected to database successfully');
     } catch (error) {
         console.error('Error connecting to database:', error);
@@ -58,9 +76,9 @@ app.use(methodOverride("_method"))
 app.engine("ejs", ejsMate)
 app.use(express.static(path.join(__dirname, '/public')))
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+// app.get('/', (req, res) => {
+//     res.send('Hello World!');
+// });
 
 app.use((req, res, next) => {
     res.locals.success = req.flash('success')
@@ -72,7 +90,7 @@ app.use((req, res, next) => {
 
 app.use("/listings", listingRouter)
 app.use("/listings/:id/reviews", reviewRouter)
-app.use("/" , userRouter)
+app.use("/", userRouter)
 
 app.all("*", (req, res, next) => {
     next(new ExpressError(404, "page not found"))

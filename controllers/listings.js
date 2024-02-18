@@ -12,7 +12,7 @@ const index = async (req, res) => {
 }
 
 const renderNewForm = (req, res) => {
-    res.render("listings/new.ejs")
+    res.render("listings/new.ejs");
 }
 
 const showListing = async (req, res) => {
@@ -41,13 +41,16 @@ const showListing = async (req, res) => {
 
 const createListing = async (req, res) => {
     try {
+        let url = req.file.path;
+        let filename = req.file.filename;
         const newListing = new Listing(req.body.listing);
         newListing.owner = req.user._id;
+        newListing.image = { url, filename };
         await newListing.save();
         req.flash("success", "New Listing saved");
         res.redirect("/listings");
     } catch (error) {
-        console.error(error);
+        console.log(error);
         req.flash("error", "Something went wrong");
         res.redirect("/listings");
     }
@@ -61,7 +64,11 @@ const editListing = async (req, res) => {
             req.flash("error", "Listing not found");
             return res.redirect("/listings");
         }
-        res.render("listings/edit.ejs", { listing });
+
+        let originalImageUrl = listing.image.url
+        originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250")
+
+        res.render("listings/edit.ejs", { listing, originalImageUrl });
     } catch (error) {
         console.error(error);
         req.flash("error", "Something went wrong");
@@ -72,7 +79,13 @@ const editListing = async (req, res) => {
 const updateListing = async (req, res) => {
     try {
         const { id } = req.params;
-        await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+        let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+        if (typeof req.file !== "undefined") {
+            let url = req.file.path;
+            let filename = req.file.filename;
+            listing.image = { filename, url }
+            await listing.save()
+        }
         req.flash("success", "Listing updated");
         res.redirect(`/listings/${id}`);
     } catch (error) {
