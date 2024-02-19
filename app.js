@@ -88,7 +88,7 @@ app.use((req, res, next) => {
     next()
 })
 
-
+// Routers
 app.use("/listings", listingRouter)
 app.use("/listings/:id/reviews", reviewRouter)
 app.use("/", userRouter)
